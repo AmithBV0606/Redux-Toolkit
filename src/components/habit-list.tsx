@@ -7,7 +7,7 @@ import {
   CheckCircleOutlined,
   DeleteOutline,
 } from "@mui/icons-material";
-import { toggleHabit } from "../store/habit-slice";
+import { removeHabbit, toggleHabit } from "../store/habit-slice";
 
 const HabitList: React.FC = () => {
   const { habits } = useSelector((state: RootState) => state.habits);
@@ -59,6 +59,12 @@ const HabitList: React.FC = () => {
                     variant="outlined"
                     color="error"
                     startIcon={<DeleteOutline />}
+                    onClick={() => {
+                      alert(
+                        `Are you sure you want to delete "${habit.name}" habit ?`
+                      );
+                      dispatch(removeHabbit({ id: habit.id }));
+                    }}
                   >
                     Remove
                   </Button>
