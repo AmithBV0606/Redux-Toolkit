@@ -29,7 +29,6 @@ const AddHabitForm: React.FC = () => {
       );
       setName("");
     }
-
   };
 
   return (

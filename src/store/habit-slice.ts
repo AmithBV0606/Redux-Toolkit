@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface Habit {
   id: string;
@@ -11,11 +11,37 @@ export interface Habit {
 // Types for initial state
 export interface HabitState {
   habits: Habit[];
+  isLoading: boolean;
+  error: string | null;
 }
 
 const initialState: HabitState = {
   habits: [],
+  isLoading: false,
+  error: null,
 };
+
+export const fetchHabits = createAsyncThunk("habits/fetchHabits", async () => {
+  // Simulating an API call
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const mockHabits: Habit[] = [
+    {
+      id: "1",
+      name: "Read book",
+      frequency: "daily",
+      completedDates: [],
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: "2",
+      name: "Go to Gym",
+      frequency: "daily",
+      completedDates: [],
+      createdAt: new Date().toISOString(),
+    },
+  ];
+  return mockHabits;
+});
 
 const habitSlice = createSlice({
   name: "habits",
@@ -55,6 +81,20 @@ const habitSlice = createSlice({
         (habit) => habit.id !== action.payload.id
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchHabits.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchHabits.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.habits = action.payload;
+      })
+      .addCase(fetchHabits.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || "Failed to fetch details!";
+      });
   },
 });
 
