@@ -15,6 +15,7 @@ export interface HabitState {
   error: string | null;
 }
 
+// state for this slice
 const initialState: HabitState = {
   habits: [],
   isLoading: false,
@@ -47,6 +48,7 @@ const habitSlice = createSlice({
   name: "habits",
   initialState,
   reducers: {
+    // Actions
     addHabit: (
       state,
       action: PayloadAction<{ name: string; frequency: "daily" | "weekly" }>
